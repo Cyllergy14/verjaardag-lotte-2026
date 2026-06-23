@@ -192,7 +192,20 @@ const f3nee = document.getElementById("fase3nee");
 
 f3ja.onclick = () => {
     f3ja.style.display = "none";
-    f3nee.classList.add("center-big");
+
+    const rect = f3nee.getBoundingClientRect();
+
+    // bereken midden van scherm horizontaal
+    const centerX = window.innerWidth / 2;
+
+    // behoud huidige hoogte
+    const currentY = rect.top;
+
+    f3nee.style.position = "fixed";
+    f3nee.style.left = centerX + "px";
+    f3nee.style.top = currentY + "px";
+
+    f3nee.style.transform = "translateX(-50%) scale(2)";
 };
 
 /* =========================
