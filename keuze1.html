@@ -2,93 +2,179 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Cadeautjes 🎁</title>
+<title>Verjaardag Game ❤️</title>
 
 <style>
 body{
     font-family: Arial;
     text-align:center;
     background:#fff0f5;
-    padding-top:100px;
+    padding-top:80px;
 }
 
 h1{
     color:#e91e63;
 }
 
+/* standaard knoppen */
 button{
     padding:15px 25px;
     font-size:18px;
     border:none;
     border-radius:25px;
-    cursor:pointer;
     margin:10px;
 }
 
+/* JA knop voor fase 1 */
 #ja{
     background:#4caf50;
     color:white;
     position:absolute;
 }
 
+/* NEE knop */
 #nee{
     background:#f44336;
     color:white;
 }
-</style>
 
+/* fase 2 styling */
+.big{
+    transform: scale(1.5);
+}
+.small{
+    transform: scale(0.6);
+}
+
+/* popup */
+.popup{
+    position:fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.popup-content{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    text-align:center;
+    max-width:300px;
+}
+
+.popup img{
+    width:100%;
+    border-radius:15px;
+    margin-bottom:10px;
+}
+
+</style>
 </head>
 
 <body>
 
 <h1 id="vraag">Wil je een nieuwe kitten? 🐱</h1>
 
-<button id="ja">JA</button>
-<button id="nee">NEE</button>
+<div id="fase1">
+    <button id="ja">JA</button>
+    <button id="nee1">NEE</button>
+</div>
+
+<div id="fase2" style="display:none;">
+    <h1 id="vraag2">Wil je bloemen? 💐</h1>
+    <button id="ja2">JA</button>
+    <button id="nee2">NEE</button>
+</div>
+
+<div id="fase3" style="display:none;">
+    <h1>Wil je een nieuw lief voor je verjaardag? 😏</h1>
+    <button onclick="openPopup1()">JA</button>
+    <button onclick="alert('Stoute keuze 😌')">NEE</button>
+</div>
+
+<!-- POPUP 1 -->
+<div class="popup" id="popup1">
+  <div class="popup-content">
+    <img src="foto1.jpg" alt="knappe man">
+    <p>Weet je het zeker, schatje? 😏</p>
+    <button onclick="openPopup2()">JA</button>
+    <button onclick="closeAll()">NEE</button>
+  </div>
+</div>
+
+<!-- POPUP 2 -->
+<div class="popup" id="popup2">
+  <div class="popup-content">
+    <img src="foto2.jpg" alt="knappe man">
+    <p>Ben je echt zeker? 😌</p>
+    <button onclick="finish()">JA</button>
+    <button onclick="closeAll()">NEE</button>
+  </div>
+</div>
 
 <script>
 
 let stap = 0;
 
-const vragen = [
-"Wil je een nieuwe kitten? 🐱",
-"Wil je bloemen? 💐",
-"Wil je een beter lief? 😏"
-];
+/* ===== FASE 1 ESCAPE JA ===== */
+const ja = document.getElementById("ja");
+ja.addEventListener("mouseover", move);
+ja.addEventListener("click", move);
 
-const jaBtn = document.getElementById("ja");
-const neeBtn = document.getElementById("nee");
-const vraag = document.getElementById("vraag");
-
-// JA knop ontsnapt
-jaBtn.addEventListener("mouseover", moveButton);
-jaBtn.addEventListener("click", moveButton);
-
-function moveButton(){
+function move(){
     const x = Math.random() * (window.innerWidth - 100);
     const y = Math.random() * (window.innerHeight - 100);
-
-    jaBtn.style.left = x + "px";
-    jaBtn.style.top = y + "px";
+    ja.style.left = x + "px";
+    ja.style.top = y + "px";
 }
 
-// NEE = volgende vraag
-neeBtn.addEventListener("click", nextStep);
+document.getElementById("nee1").onclick = () => {
+    document.getElementById("fase1").style.display = "none";
+    document.getElementById("fase2").style.display = "block";
+}
 
-function nextStep(){
-    stap++;
+/* ===== FASE 2: JA KRIMPT ===== */
+let scale = 1;
 
-    if(stap < vragen.length){
-        vraag.innerText = vragen[stap];
-    } else {
-        document.body.innerHTML = `
-            <h1>😏 Oké eerlijk...</h1>
-            <p>Je hebt alles afgewezen... maar ik heb toch iets voor je voorbereid ❤️</p>
-            <button onclick="window.location.href='keuze.html'">
-                Verder
-            </button>
-        `;
-    }
+document.getElementById("ja2").onclick = () => {
+    scale -= 0.1;
+    if(scale < 0.3) scale = 0.3;
+
+    let btn = document.getElementById("ja2");
+    let nee = document.getElementById("nee2");
+
+    btn.style.transform = `scale(${scale})`;
+    nee.style.transform = `scale(${2 - scale})`;
+};
+
+document.getElementById("nee2").onclick = () => {
+    document.getElementById("fase2").style.display = "none";
+    document.getElementById("fase3").style.display = "block";
+}
+
+/* ===== POPUPS ===== */
+function openPopup1(){
+    document.getElementById("popup1").style.display = "flex";
+}
+
+function openPopup2(){
+    document.getElementById("popup2").style.display = "flex";
+}
+
+function closeAll(){
+    document.getElementById("popup1").style.display = "none";
+    document.getElementById("popup2").style.display = "none";
+}
+
+function finish(){
+    document.body.innerHTML = `
+        <h1>😏 Ik wist het wel...</h1>
+        <p>Maar jij had nooit echt keuze ❤️</p>
+    `;
 }
 
 </script>
