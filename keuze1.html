@@ -14,284 +14,169 @@ body{
     overflow:hidden;
 }
 
-
 h1{
     color:#e91e63;
 }
 
-
 /* knoppen */
-
 button{
-
     padding:15px 25px;
     font-size:18px;
     border:none;
     border-radius:25px;
     margin:10px;
     transition:all 0.4s ease;
-
 }
 
-
-
 /* JA vlucht knop */
-
 #ja{
-
     background:#4caf50;
     color:white;
     position:absolute;
-
 }
-
-
 
 /* NEE */
-
-#nee1,
-#nee2{
-
+#nee1, #nee2{
     background:#f44336;
     color:white;
-
 }
 
-
-
 /* POPUPS */
-
 .popup{
-
     position:fixed;
     top:0;
     left:0;
-
     width:100%;
     height:100%;
-
     background:rgba(0,0,0,0.7);
-
     display:none;
-
     justify-content:center;
     align-items:center;
-
 }
-
-
 
 .popup-content{
-
     background:white;
-
     padding:20px;
-
     border-radius:20px;
-
     text-align:center;
-
     max-width:300px;
-
 }
-
-
 
 .popup img{
-
     width:100%;
-
     border-radius:15px;
-
 }
 
-
-
-/* vallen */
-
+/* animaties */
 .fall{
-
-animation:fallDown 0.8s forwards;
-
+    animation:fallDown 0.8s forwards;
 }
-
 
 @keyframes fallDown{
-
 to{
-
-transform:translateY(600px) rotate(720deg);
-
-opacity:0;
-
+    transform:translateY(600px) rotate(720deg);
+    opacity:0;
 }
-
 }
-
-
-
-/* breken */
 
 .break{
-
-animation:breakApart 0.8s forwards;
-
+    animation:breakApart 0.8s forwards;
 }
-
-
 
 @keyframes breakApart{
-
-
-0%{
-
-transform:scale(1);
-
-opacity:1;
-
+0%{transform:scale(1); opacity:1;}
+50%{transform:scale(0.5) rotate(10deg);}
+100%{transform:scale(0) rotate(360deg); opacity:0;}
 }
-
-
-50%{
-
-transform:scale(0.5) rotate(10deg);
-
-}
-
-
-100%{
-
-transform:scale(0) rotate(360deg);
-
-opacity:0;
-
-}
-
-}
-
-
 
 /* =====================
-FINALE SCHERM
+FINALE SLIDES
 ===================== */
 
-
 .final-screen{
-
-height:100vh;
-
-width:100%;
-
-background:#080808;
-
-display:flex;
-
-flex-direction:column;
-
-justify-content:center;
-
-align-items:center;
-
-color:white;
-
-animation:fadeIn 2s ease;
-
-overflow:hidden;
-
+    height:100vh;
+    width:100%;
+    background:#080808;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    animation:fadeIn 1.5s ease;
+    overflow:hidden;
 }
 
+/* GIF SCREEN */
+.gif-screen{
+    height:100vh;
+    width:100%;
+    background:#080808;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    animation:fadeIn 1.5s ease;
+}
 
+.gif-content{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+}
 
-/* TYPEWRITER TEKST */
+#nextBtn{
+    padding:15px 30px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    background:#e91e63;
+    color:white;
+    cursor:pointer;
+}
 
+/* TYPEWRITER */
 #typing{
-
-font-size:32px;
-
-max-width:800px;
-
-text-align:center;
-
-z-index:2;
-
-color:#e91e63;   /* <-- zelfde stijl als je andere titels */
-
+    font-size:32px;
+    max-width:800px;
+    text-align:center;
+    color:#e91e63;
 }
 
-
+/* tweede eindtekst */
+.final-text{
+    font-size:28px;
+    color:#e91e63;
+    max-width:800px;
+    line-height:1.5;
+    text-align:center;
+}
 
 /* GIF */
-
 .firegif{
-
-width:300px;
-
-margin-top:40px;
-
-border-radius:20px;
-
-z-index:2;
-
+    width:300px;
+    margin-top:40px;
+    border-radius:20px;
 }
-
-
-
-/* fade */
-
-@keyframes fadeIn{
-
-from{ opacity:0; }
-
-to{ opacity:1; }
-
-}
-
-
 
 /* vuur achtergrond */
-
 .fire{
-
-position:absolute;
-
-width:100%;
-
-height:100%;
-
-background:
-
-radial-gradient(circle at bottom,
-orange,
-transparent 40%),
-
-radial-gradient(circle at top,
-red,
-transparent 50%);
-
-opacity:0.6;
-
-animation:fireMove 3s infinite alternate;
-
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:
+    radial-gradient(circle at bottom, orange, transparent 40%),
+    radial-gradient(circle at top, red, transparent 50%);
+    opacity:0.6;
+    animation:fireMove 3s infinite alternate;
 }
-
-
 
 @keyframes fireMove{
-
-from{
-
-transform:scale(1);
-filter:blur(5px);
-
+from{transform:scale(1); filter:blur(5px);}
+to{transform:scale(1.2); filter:blur(20px);}
 }
 
-to{
-
-transform:scale(1.2);
-filter:blur(20px);
-
-}
-
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
 }
 
 </style>
@@ -319,7 +204,7 @@ filter:blur(20px);
 <button id="fase3nee">NEE</button>
 </div>
 
-<!-- POPUP 1 -->
+<!-- POPUPS -->
 <div class="popup" id="popup1">
 <div class="popup-content">
 <img src="fotoman1.jpg">
@@ -329,7 +214,6 @@ filter:blur(20px);
 </div>
 </div>
 
-<!-- POPUP 2 -->
 <div class="popup" id="popup2">
 <div class="popup-content">
 <img src="fotoman2.jpg">
@@ -345,131 +229,98 @@ filter:blur(20px);
 const ja=document.getElementById("ja");
 
 ja.onmouseover=()=>{
-
 ja.style.left=Math.random()*(window.innerWidth-120)+"px";
 ja.style.top=Math.random()*(window.innerHeight-120)+"px";
-
 };
-
 
 /* FASE 1 -> 2 */
 document.getElementById("nee1").onclick=()=>{
-
 fase1.style.display="none";
 vraag.style.display="none";
 fase2.style.display="block";
-
 };
-
 
 /* FASE 2 */
 let scale=1;
 
 ja2.onclick=()=>{
-
 scale-=0.1;
 if(scale<0.3) scale=0.3;
-
 ja2.style.transform=`scale(${scale})`;
 nee2.style.transform=`scale(${2-scale})`;
-
 };
 
-
-/* FASE 2 -> 3 */
 nee2.onclick=()=>{
-
 fase2.style.display="none";
 vraag2.style.display="none";
 fase3.style.display="block";
-
 };
-
 
 /* FASE 3 */
 fase3ja.onclick=()=>{
-
 fase3ja.style.display="none";
 fase3nee.style.position="fixed";
 fase3nee.style.left="50%";
 fase3nee.style.transform="translateX(-50%) scale(2)";
-
 };
 
+fase3nee.onclick=()=>{
+popup1.style.display="flex";
+};
 
 /* POPUP 1 */
-fase3nee.onclick=()=>{
-
-popup1.style.display="flex";
-
-};
-
 p1nee.onclick=(e)=>{
-
 e.target.classList.add("fall");
 p1ja.style.transform="scale(2)";
-
 };
 
 p1ja.onclick=()=>{
-
 popup1.style.display="none";
 popup2.style.display="flex";
-
 };
 
-
-/* POPUP 2 + FINALE */
+/* POPUP 2 -> GIF SCREEN */
 p2ja.onclick=()=>{
 
 document.body.innerHTML=`
-
-<div class="final-screen">
-
-<div class="fire"></div>
-
-<audio autoplay loop>
-<source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<h1 id="typing"></h1>
-
-<img src="giffire.gif" class="firegif">
-
+<div class="gif-screen">
+    <div class="gif-content">
+        <img src="giffire.gif" class="firegif">
+        <button id="nextBtn">VOLGENDE ➜</button>
+    </div>
 </div>
-
 `;
 
+};
 
-/* TYPEWRITER */
-let tekst="Inderdaad, er is maar 1 iemand die je in vuur en vlam zet ❤️";
+/* NEXT BUTTON -> FINAL SCREEN */
+document.addEventListener("click", function(e){
+
+if(e.target && e.target.id==="nextBtn"){
+
+document.body.innerHTML=`
+<div class="final-screen">
+    <div class="fire"></div>
+    <h1 class="final-text"></h1>
+</div>
+`;
+
+let tekst="Goed gedaan ❤️ je hebt de vragen correct beantwoord en hebt een weekendje gewonnen. Hou 24-07-2026, 25-07-2026 & 26-07-2026 vrij. Zie je dan meis!";
 let i=0;
 
-function typeWriter(){
-
-if(i < tekst.length){
-
-document.getElementById("typing").innerHTML += tekst.charAt(i);
-
+function type(){
+if(i<tekst.length){
+document.querySelector(".final-text").innerHTML += tekst.charAt(i);
 i++;
+setTimeout(type,30);
+}
+}
 
-setTimeout(typeWriter,15); /* 🔥 sneller gemaakt */
+type();
 
 }
 
-}
-
-typeWriter();
-
-};
-
-
-p2nee.onclick=(e)=>{
-
-e.target.classList.add("break");
-p2ja.style.transform="scale(2)";
-
-};
+});
 
 </script>
 
