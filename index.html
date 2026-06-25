@@ -1,35 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Verjaardag ❤️</title>
 
 <style>
 
 body {
-    text-align:center;
-    font-family: Arial;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
     background: #ffe6f0;
-    padding-top:80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
 }
 
+/* centrale container zoals je andere slides */
+.container {
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+/* titel */
 h1 {
-    color:#e91e63;
+    color: #e91e63;
+    font-size: 26px;
+    margin-bottom: 15px;
 }
 
+/* tekst */
+p {
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* afbeelding responsief */
+.fotolotte {
+    width: 70%;
+    max-width: 250px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* knop */
 button {
-    background:#e91e63;
-    color:white;
-    border:none;
-    padding:15px 30px;
-    font-size:20px;
-    border-radius:30px;
-    cursor:pointer;
+    background: #e91e63;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
-.fotolotte{
-    width:250px;
-    border-radius:20px;
-    margin-bottom:25px;
+button:active {
+    transform: scale(0.95);
+}
+
+/* extra optimalisatie voor kleine gsm schermen */
+@media (max-width: 480px) {
+
+    h1 {
+        font-size: 22px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .fotolotte {
+        width: 85%;
+    }
 }
 
 </style>
@@ -38,29 +94,29 @@ button {
 
 <body>
 
-<img src="fotolotte1.jpg" class="fotolotte">
+<div class="container">
 
-<h1>🎉 Proficiat met je verjaardag meis ❤️</h1>
+    <img src="fotolotte1.jpg" class="fotolotte">
 
-<p>
-Ik heb een kleine verrassing voor je gemaakt.
-<br>
-Maar eerst moet je wat vragen goed beantwoorden...
-</p>
+    <h1>🎉 Proficiat met je verjaardag meis ❤️</h1>
 
-<button onclick="start()">
-Start ❤️
-</button>
+    <p>
+        Ik heb een kleine verrassing voor je gemaakt.
+        <br>
+        Maar eerst moet je wat vragen goed beantwoorden...
+    </p>
 
+    <button onclick="start()">
+        Start ❤️
+    </button>
+
+</div>
 
 <script>
-
 function start(){
     window.location.href = "./keuze1.html";
 }
-
 </script>
-
 
 </body>
 </html>
