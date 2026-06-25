@@ -13,20 +13,20 @@ body{
     text-align:center;
     background:#fff0f5;
     padding-top:80px;
-    overflow-x:hidden;
+    overflow:hidden;
 }
 
 html, body{
     height:100%;
     margin:0;
-    touch-action: manipulation;
 }
 
+/* TITEL */
 h1{
     color:#e91e63;
 }
 
-/* buttons */
+/* BUTTONS */
 button{
     padding:15px 25px;
     font-size:18px;
@@ -37,14 +37,22 @@ button{
     max-width: 80%;
 }
 
-/* 💥 SMART EVASIVE JA BUTTON */
+/* START FIX: beide knoppen netjes naast elkaar */
+.button-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    margin-top:10px;
+}
+
+/* JA knop = normaal in layout starten */
 #ja{
     background:#4caf50;
     color:white;
-    position:absolute;
-    left:50%;
-    top:320px;
-    transform:translateX(-50%);
+    position:relative;   /* 🔥 BELANGRIJK: start normaal naast NEE */
+    left:0;
+    top:0;
 }
 
 /* NEE */
@@ -53,14 +61,7 @@ button{
     color:white;
 }
 
-.button-row{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:15px;
-}
-
-/* images */
+/* afbeeldingen */
 img{
     max-width:80%;
     border-radius:20px;
@@ -94,26 +95,19 @@ img{
     display:flex;
     justify-content:center;
     align-items:center;
-    text-align:center;
 }
 
 .gif-content{
     display:flex;
     flex-direction:column;
-    gap:15px;
     align-items:center;
+    gap:15px;
 }
 
-/* FIX VOLGENDE KNOP */
+/* VOLGENDE FIX */
 #nextBtn{
-    margin-top:0;
     position:relative;
-    top:-20px;
-    z-index:999;
-}
-
-.firegif{
-    width:220px;
+    top:-15px;
 }
 
 /* FINAL */
@@ -136,15 +130,7 @@ img{
 .final-text-bottom{
     font-size:24px;
     color:#e91e63;
-}
-
-/* CONFETTI CANVAS */
-canvas{
-    position:fixed;
-    top:0;
-    left:0;
-    pointer-events:none;
-    z-index:9999;
+    max-width:800px;
 }
 
 </style>
@@ -155,12 +141,14 @@ canvas{
 <h1 id="vraag">Wil je een nieuwe kitten? 🐱</h1>
 
 <div id="fase1">
+
 <img src="fotokat4.jpg" class="fotokat4">
 
 <div class="button-row">
     <button id="ja">JA</button>
     <button id="nee1">NEE</button>
 </div>
+
 </div>
 
 <div id="fase2" style="display:none;">
@@ -198,41 +186,46 @@ canvas{
 </div>
 </div>
 
-<canvas id="confetti"></canvas>
-
 <script>
 
 /* =========================
-   💥 SMART AI JA BUTTON
+   FIX: JA start normaal naast NEE
 ========================= */
 
 const ja = document.getElementById("ja");
 
-function moveAway(x,y){
-    const rect = ja.getBoundingClientRect();
+/* zodra gebruiker probeert te klikken → weg springen */
+function escapeButton(){
+    const padding = 100;
 
-    let dx = rect.left - x;
-    let dy = rect.top - y;
+    const x = Math.random() * (window.innerWidth - padding);
+    const y = Math.random() * (window.innerHeight - padding);
 
-    ja.style.left = (rect.left + dx * 0.6 + (Math.random()*60-30)) + "px";
-    ja.style.top = (rect.top + dy * 0.6 + (Math.random()*60-30)) + "px";
+    ja.style.position = "fixed";   // pas dan wordt hij "levend"
+    ja.style.left = x + "px";
+    ja.style.top = y + "px";
 }
 
-/* touch AI tracking */
+/* desktop + mobiel trigger */
+ja.addEventListener("mouseenter", escapeButton);
+ja.addEventListener("touchstart", (e)=>{
+    e.preventDefault();
+    escapeButton();
+});
+
+/* extra: ook bij proberen aanraken */
 document.addEventListener("touchmove", (e)=>{
     const t = e.touches[0];
-    moveAway(t.clientX, t.clientY);
+    const rect = ja.getBoundingClientRect();
+
+    const dx = rect.left - t.clientX;
+    const dy = rect.top - t.clientY;
+
+    ja.style.left = (rect.left + dx * 0.4) + "px";
+    ja.style.top = (rect.top + dy * 0.4) + "px";
 });
 
-/* mouse fallback */
-document.addEventListener("mousemove", (e)=>{
-    moveAway(e.clientX, e.clientY);
-});
-
-/* =========================
-   FLOW
-========================= */
-
+/* FLOW */
 document.getElementById("nee1").onclick=()=>{
 fase1.style.display="none";
 vraag.style.display="none";
@@ -240,6 +233,7 @@ fase2.style.display="block";
 };
 
 let scale=1;
+
 ja2.onclick=()=>{
 scale-=0.1;
 if(scale<0.3) scale=0.3;
@@ -277,8 +271,8 @@ p2ja.onclick=()=>{
 document.body.innerHTML=`
 <div class="gif-screen">
 <div class="gif-content">
-<h1>🔥 Jij bent gekozen ❤️</h1>
-<img src="giffire.gif" class="firegif">
+<h1>❤️ Goeie keuze, er is natuurlijk maar 1 persoon die jou in vuur en vlam zet!🔥 </h1>
+<img src="giffire.gif">
 <p>Laatste stap...</p>
 <button id="nextBtn">VOLGENDE ➜</button>
 </div>
@@ -287,10 +281,7 @@ document.body.innerHTML=`
 
 };
 
-/* =========================
-   FINAL + CONFETTI
-========================= */
-
+/* FINAL */
 document.addEventListener("click",(e)=>{
 if(e.target.id==="nextBtn"){
 
@@ -307,8 +298,6 @@ document.body.innerHTML=`
 </div>
 </div>
 `;
-
-startConfetti();
 
 let top="Goed gedaan ❤️ je hebt de vragen correct beantwoord en hebt een weekendje gewonnen.";
 let bottom="Hou 24-07-2026, 25-07-2026 & 26-07-2026 vrij. Zie je dan & love you meis!";
@@ -336,56 +325,6 @@ t1();
 
 }
 });
-
-/* =========================
-   🎉 SIMPLE CONFETTI ENGINE
-========================= */
-
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
-
-let pieces = [];
-
-function resize(){
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize",resize);
-
-function startConfetti(){
-
-pieces = [];
-
-for(let i=0;i<120;i++){
-pieces.push({
-x:Math.random()*canvas.width,
-y:-20,
-r:Math.random()*6+4,
-d:Math.random()*120,
-color:`hsl(${Math.random()*360},100%,60%)`,
-tilt:Math.random()*10
-});
-}
-
-animate();
-}
-
-function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-pieces.forEach(p=>{
-p.y += 3;
-p.x += Math.sin(p.d)*2;
-
-ctx.fillStyle=p.color;
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fill();
-});
-
-requestAnimationFrame(animate);
-}
 
 </script>
 
