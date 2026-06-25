@@ -16,7 +16,6 @@ body{
     overflow-x:hidden;
 }
 
-/* belangrijk voor mobiele positioning */
 html, body{
     height:100%;
     margin:0;
@@ -41,7 +40,7 @@ button{
 #ja{
     background:#4caf50;
     color:white;
-    position:absolute; /* 🔥 belangrijk voor vlucht effect */
+    position:absolute;
     left:50%;
     top:320px;
     transform:translateX(-50%);
@@ -131,6 +130,14 @@ to{
     gap:20px;
 }
 
+/* 🔥 FIX VOLGENDE KNOP ZICHTBAAR OP GSM */
+#nextBtn{
+    margin-top:10px;
+    position:relative;
+    top:-10px;
+    z-index:10;
+}
+
 .firegif{
     width:250px;
     border-radius:20px;
@@ -155,7 +162,8 @@ to{
     gap:20px;
 }
 
-.final-text{
+.final-text-top,
+.final-text-bottom{
     font-size:28px;
     color:#e91e63;
     max-width:800px;
@@ -250,14 +258,10 @@ function moveJa(){
     const maxX = window.innerWidth - 120;
     const maxY = window.innerHeight - 120;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    ja.style.left = x + "px";
-    ja.style.top = y + "px";
+    ja.style.left = Math.random() * maxX + "px";
+    ja.style.top = Math.random() * maxY + "px";
 }
 
-/* DESKTOP + MOBILE (FIX) */
 ja.addEventListener("mouseenter", moveJa);
 ja.addEventListener("touchstart", (e)=>{
     e.preventDefault();
@@ -326,7 +330,7 @@ document.body.innerHTML=`
 
 };
 
-/* FINAL */
+/* FINAL SCREEN (FIXED SPLIT TEXT) */
 document.addEventListener("click", function(e){
 
 if(e.target && e.target.id==="nextBtn"){
@@ -334,24 +338,42 @@ if(e.target && e.target.id==="nextBtn"){
 document.body.innerHTML=`
 <div class="final-screen">
     <div class="final-content">
+
+        <h1 class="final-text-top"></h1>
+
         <img src="fotoweekend1.jpg" class="weekendfoto">
-        <h1 class="final-text"></h1>
+
+        <h1 class="final-text-bottom"></h1>
+
     </div>
 </div>
 `;
 
-let tekst="Goed gedaan ❤️ je hebt de vragen correct beantwoord en hebt een weekendje gewonnen. Hou 24-07-2026, 25-07-2026 & 26-07-2026 vrij. Zie je dan & love you meis!";
-let i=0;
+let tekstTop = "Goed gedaan ❤️ je hebt de vragen correct beantwoord en hebt een weekendje gewonnen.";
+let tekstBottom = "Hou 24-07-2026, 25-07-2026 & 26-07-2026 vrij. Zie je dan & love you meis!";
 
-function type(){
-if(i<tekst.length){
-document.querySelector(".final-text").innerHTML += tekst.charAt(i);
+let i = 0;
+
+function typeTop(){
+if(i < tekstTop.length){
+document.querySelector(".final-text-top").innerHTML += tekstTop.charAt(i);
 i++;
-setTimeout(type,30);
+setTimeout(typeTop, 30);
+} else {
+i = 0;
+typeBottom();
 }
 }
 
-type();
+function typeBottom(){
+if(i < tekstBottom.length){
+document.querySelector(".final-text-bottom").innerHTML += tekstBottom.charAt(i);
+i++;
+setTimeout(typeBottom, 30);
+}
+}
+
+typeTop();
 
 }
 
