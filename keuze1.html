@@ -19,24 +19,25 @@ body{
 html, body{
     height:100%;
     margin:0;
+    touch-action: manipulation;
 }
 
 h1{
     color:#e91e63;
 }
 
-/* knoppen */
+/* buttons */
 button{
     padding:15px 25px;
     font-size:18px;
     border:none;
     border-radius:25px;
     margin:10px;
-    transition:all 0.3s ease;
+    transition:0.2s;
     max-width: 80%;
 }
 
-/* JA */
+/* 💥 SMART EVASIVE JA BUTTON */
 #ja{
     background:#4caf50;
     color:white;
@@ -52,35 +53,29 @@ button{
     color:white;
 }
 
-/* rij */
 .button-row{
     display:flex;
     justify-content:center;
-    gap:15px;
     flex-wrap:wrap;
-    margin-top:10px;
+    gap:15px;
 }
 
-/* afbeeldingen */
+/* images */
 img{
-    max-width: 80%;
-    height: auto;
-    border-radius: 20px;
+    max-width:80%;
+    border-radius:20px;
 }
 
-.katfoto, .fotokat4, .weekendfoto{
+.katfoto,.fotokat4,.weekendfoto{
     width:220px;
     max-width:60vw;
     margin:15px 0;
 }
 
-/* POPUPS */
+/* popup */
 .popup{
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
+    inset:0;
     background:rgba(0,0,0,0.7);
     display:none;
     justify-content:center;
@@ -91,32 +86,11 @@ img{
     background:white;
     padding:20px;
     border-radius:20px;
-    text-align:center;
-    max-width:300px;
 }
 
-.popup img{
-    width:100%;
-    border-radius:15px;
-}
-
-/* animaties */
-.fall{
-    animation:fallDown 0.8s forwards;
-}
-
-@keyframes fallDown{
-to{
-    transform:translateY(600px) rotate(720deg);
-    opacity:0;
-}
-}
-
-/* GIF SCREEN */
+/* GIF */
 .gif-screen{
     height:100vh;
-    width:100%;
-    background:#fff0f5;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -126,32 +100,28 @@ to{
 .gif-content{
     display:flex;
     flex-direction:column;
+    gap:15px;
     align-items:center;
-    gap:20px;
 }
 
-/* 🔥 FIX VOLGENDE KNOP ZICHTBAAR OP GSM */
+/* FIX VOLGENDE KNOP */
 #nextBtn{
-    margin-top:10px;
+    margin-top:0;
     position:relative;
-    top:-10px;
-    z-index:10;
+    top:-20px;
+    z-index:999;
 }
 
 .firegif{
-    width:250px;
-    border-radius:20px;
+    width:220px;
 }
 
-/* FINAL SCREEN */
+/* FINAL */
 .final-screen{
     height:100vh;
-    width:100%;
-    background:#fff0f5;
     display:flex;
     justify-content:center;
     align-items:center;
-    text-align:center;
     padding:20px;
 }
 
@@ -164,39 +134,20 @@ to{
 
 .final-text-top,
 .final-text-bottom{
-    font-size:28px;
+    font-size:24px;
     color:#e91e63;
-    max-width:800px;
-    line-height:1.5;
 }
 
-/* MOBILE */
-@media (max-width: 600px){
-
-    body{
-        padding-top:40px;
-    }
-
-    h1{
-        font-size:22px;
-    }
-
-    button{
-        font-size:16px;
-        padding:12px 20px;
-    }
-
-    .katfoto, .fotokat4, .weekendfoto{
-        width:180px;
-    }
-
-    .firegif{
-        width:200px;
-    }
+/* CONFETTI CANVAS */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+    z-index:9999;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -204,19 +155,17 @@ to{
 <h1 id="vraag">Wil je een nieuwe kitten? 🐱</h1>
 
 <div id="fase1">
-
 <img src="fotokat4.jpg" class="fotokat4">
 
 <div class="button-row">
     <button id="ja">JA</button>
     <button id="nee1">NEE</button>
 </div>
-
 </div>
 
 <div id="fase2" style="display:none;">
 <h1 id="vraag2">Wil je bloemen? 💐</h1>
-<img src="fotobloemen1.jpg" class="katfoto">
+<img src="fotobloemen1.jpg">
 <br>
 <button id="ja2">JA</button>
 <button id="nee2">NEE</button>
@@ -224,7 +173,7 @@ to{
 
 <div id="fase3" style="display:none;">
 <h1>Wil je een nieuw lief voor je verjaardag? 😏</h1>
-<img src="fotosamen1.jpg" class="katfoto">
+<img src="fotosamen1.jpg">
 <br>
 <button id="fase3ja">JA</button>
 <button id="fase3nee">NEE</button>
@@ -234,7 +183,7 @@ to{
 <div class="popup" id="popup1">
 <div class="popup-content">
 <img src="fotoman1.jpg">
-<p>Weet je het zeker, schatje? 😏</p>
+<p>Weet je het zeker? 😏</p>
 <button id="p1ja">JA</button>
 <button id="p1nee">NEE</button>
 </div>
@@ -249,49 +198,59 @@ to{
 </div>
 </div>
 
+<canvas id="confetti"></canvas>
+
 <script>
 
-/* helpers */
+/* =========================
+   💥 SMART AI JA BUTTON
+========================= */
+
 const ja = document.getElementById("ja");
 
-function moveJa(){
-    const maxX = window.innerWidth - 120;
-    const maxY = window.innerHeight - 120;
+function moveAway(x,y){
+    const rect = ja.getBoundingClientRect();
 
-    ja.style.left = Math.random() * maxX + "px";
-    ja.style.top = Math.random() * maxY + "px";
+    let dx = rect.left - x;
+    let dy = rect.top - y;
+
+    ja.style.left = (rect.left + dx * 0.6 + (Math.random()*60-30)) + "px";
+    ja.style.top = (rect.top + dy * 0.6 + (Math.random()*60-30)) + "px";
 }
 
-ja.addEventListener("mouseenter", moveJa);
-ja.addEventListener("touchstart", (e)=>{
-    e.preventDefault();
-    moveJa();
+/* touch AI tracking */
+document.addEventListener("touchmove", (e)=>{
+    const t = e.touches[0];
+    moveAway(t.clientX, t.clientY);
 });
 
-/* FASE 1 -> 2 */
+/* mouse fallback */
+document.addEventListener("mousemove", (e)=>{
+    moveAway(e.clientX, e.clientY);
+});
+
+/* =========================
+   FLOW
+========================= */
+
 document.getElementById("nee1").onclick=()=>{
 fase1.style.display="none";
 vraag.style.display="none";
 fase2.style.display="block";
 };
 
-/* FASE 2 */
 let scale=1;
-
 ja2.onclick=()=>{
 scale-=0.1;
 if(scale<0.3) scale=0.3;
 ja2.style.transform=`scale(${scale})`;
-nee2.style.transform=`scale(${2-scale})`;
 };
 
 nee2.onclick=()=>{
 fase2.style.display="none";
-vraag2.style.display="none";
 fase3.style.display="block";
 };
 
-/* FASE 3 */
 fase3ja.onclick=()=>{
 fase3ja.style.display="none";
 fase3nee.style.position="fixed";
@@ -303,9 +262,8 @@ fase3nee.onclick=()=>{
 popup1.style.display="flex";
 };
 
-/* POPUP 1 */
 p1nee.onclick=(e)=>{
-e.target.classList.add("fall");
+e.target.style.opacity="0";
 p1ja.style.transform="scale(2)";
 };
 
@@ -314,70 +272,120 @@ popup1.style.display="none";
 popup2.style.display="flex";
 };
 
-/* POPUP 2 */
 p2ja.onclick=()=>{
 
 document.body.innerHTML=`
 <div class="gif-screen">
-    <div class="gif-content">
-        <h1>🔥Goed gekozen, want er is maar 1 persoon die jou in vuur en vlam zet ❤️</h1>
-        <img src="giffire.gif" class="firegif">
-        <p>Nog één laatste stapje... 😏</p>
-        <button id="nextBtn">VOLGENDE ➜</button>
-    </div>
+<div class="gif-content">
+<h1>🔥 Jij bent gekozen ❤️</h1>
+<img src="giffire.gif" class="firegif">
+<p>Laatste stap...</p>
+<button id="nextBtn">VOLGENDE ➜</button>
+</div>
 </div>
 `;
 
 };
 
-/* FINAL SCREEN (FIXED SPLIT TEXT) */
-document.addEventListener("click", function(e){
+/* =========================
+   FINAL + CONFETTI
+========================= */
 
-if(e.target && e.target.id==="nextBtn"){
+document.addEventListener("click",(e)=>{
+if(e.target.id==="nextBtn"){
 
 document.body.innerHTML=`
 <div class="final-screen">
-    <div class="final-content">
+<div class="final-content">
 
-        <h1 class="final-text-top"></h1>
+<h1 class="final-text-top"></h1>
 
-        <img src="fotoweekend1.jpg" class="weekendfoto">
+<img src="fotoweekend1.jpg" class="weekendfoto">
 
-        <h1 class="final-text-bottom"></h1>
+<h1 class="final-text-bottom"></h1>
 
-    </div>
+</div>
 </div>
 `;
 
-let tekstTop = "Goed gedaan ❤️ je hebt de vragen correct beantwoord en hebt een weekendje gewonnen.";
-let tekstBottom = "Hou 24-07-2026, 25-07-2026 & 26-07-2026 vrij. Zie je dan & love you meis!";
+startConfetti();
 
-let i = 0;
+let top="Goed gedaan ❤️ je hebt de vragen correct beantwoord en hebt een weekendje gewonnen.";
+let bottom="Hou 24-07-2026, 25-07-2026 & 26-07-2026 vrij. Zie je dan & love you meis!";
 
-function typeTop(){
-if(i < tekstTop.length){
-document.querySelector(".final-text-top").innerHTML += tekstTop.charAt(i);
-i++;
-setTimeout(typeTop, 30);
-} else {
-i = 0;
-typeBottom();
+let i=0;
+
+function t1(){
+if(i<top.length){
+document.querySelector(".final-text-top").innerHTML+=top[i++];
+setTimeout(t1,25);
+}else{
+i=0;
+t2();
 }
 }
 
-function typeBottom(){
-if(i < tekstBottom.length){
-document.querySelector(".final-text-bottom").innerHTML += tekstBottom.charAt(i);
-i++;
-setTimeout(typeBottom, 30);
+function t2(){
+if(i<bottom.length){
+document.querySelector(".final-text-bottom").innerHTML+=bottom[i++];
+setTimeout(t2,25);
 }
 }
 
-typeTop();
+t1();
 
 }
-
 });
+
+/* =========================
+   🎉 SIMPLE CONFETTI ENGINE
+========================= */
+
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+let pieces = [];
+
+function resize(){
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+function startConfetti(){
+
+pieces = [];
+
+for(let i=0;i<120;i++){
+pieces.push({
+x:Math.random()*canvas.width,
+y:-20,
+r:Math.random()*6+4,
+d:Math.random()*120,
+color:`hsl(${Math.random()*360},100%,60%)`,
+tilt:Math.random()*10
+});
+}
+
+animate();
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+pieces.forEach(p=>{
+p.y += 3;
+p.x += Math.sin(p.d)*2;
+
+ctx.fillStyle=p.color;
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+});
+
+requestAnimationFrame(animate);
+}
 
 </script>
 
